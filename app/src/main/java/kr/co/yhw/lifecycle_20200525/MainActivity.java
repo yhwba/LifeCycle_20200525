@@ -7,12 +7,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 import kr.co.yhw.lifecycle_20200525.databinding.ActivityMainBinding;
 
 public class MainActivity extends BaseActivity {
 
     ActivityMainBinding binding;
+
+//    최근에 백버튼을 누른 시간 기록
+    long lastBackTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,22 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         Log.d("생명주기확인","onPause실행");
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+
+        long now = System.currentTimeMillis();
+//         현재시간- 지난번에 백버튼 누른 시간이 1초 이상? (너무 오랫만에 누름)
+        if( now - lastBackTime > 1000){
+            Toast.makeText(mContext, "한번 더 백버튼을 누르면 앱이 종료됩니다", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            finish();
+        }
+//         언제 눌렀는지 기록 갱신
+         lastBackTime = now;
     }
 
     @Override
